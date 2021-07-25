@@ -460,7 +460,7 @@ exports.getProductPaginate = async (req, res) => {
             result.paginate = await Product.find(
                 { name: { $regex: new RegExp(searchTerm, 'i') } }
             )
-                .select('_id category name price quantity description productPictures ')
+                .select('_id category name price quantity description productPictures color size')
                 // .populate('category')
                 .populate({ path: 'category', select: '_id name' })
                 .skip(startIndex).limit(limit).exec()
@@ -576,7 +576,7 @@ exports.getProductDetailById = (req, res) => {
     let { productId } = req.params
     if (productId) {
         Product.findOne({ _id: productId })
-            .populate('reviews.user', "firstName lastName")
+            .populate('reviews.user', "firstName lastName profilePicture")
             .exec()
             .then(product => {
                 return res.status(200).json({ product })
@@ -589,13 +589,15 @@ exports.getProductDetailById = (req, res) => {
     }
 }
 exports.productUpdate = (req, res) => {
-    const { name, price, quantity, description, category } = req.body
+    const { name, price, quantity, description, category ,color,size} = req.body
     let productPictures = []
     if (req.files.length > 0) {
         productPictures = req.files.map((file) => {
             return { img: file.filename }
         })
     }
+    let colorArray = color.split(",")
+    let sizeArray = size.split(",")
     Product.updateOne({ _id: req.body.productId }, {
         $set: {
             name: name,
@@ -605,6 +607,8 @@ exports.productUpdate = (req, res) => {
             description: description,
             productPictures: productPictures,
             category: category,
+            color:colorArray,
+            size:sizeArray,
             createdBy: req.user._id
         }
     }).exec()

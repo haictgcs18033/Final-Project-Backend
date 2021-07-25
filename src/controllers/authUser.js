@@ -128,7 +128,6 @@ exports.updateUserDetail = (req, res) => {
                 res.status(200).json(user)
             })
             .catch(err => {
-                console.log(err)
                 res.status(400).json({ message: err })
             })
     } else {
@@ -144,7 +143,7 @@ exports.updateUserDetail = (req, res) => {
                 res.status(200).json(user)
             })
             .catch(err => {
-                console.log(err)
+            
                 res.status(400).json({ message: err })
             })
     }
