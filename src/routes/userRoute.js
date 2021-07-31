@@ -1,5 +1,5 @@
 const express = require('express')
-const { signup, signin, changePassword, loginGoogle, loginFacebook, updateUserDetail, getUserDetail } = require('../controllers/authUser')
+const { signup, signin, changePassword, loginGoogle, loginFacebook, updateUserDetail, getUserDetail, forgetPassword, resetPassword } = require('../controllers/authUser')
 const {requireSignin, userMiddleware}=require('../middleware/middleware')
 // Validation 
 
@@ -23,6 +23,8 @@ const upload = multer({ storage: storage })
 
 router.post('/signin',validateSigninRequest,isRequestValidated,signin)
 router.post('/signup',validateSignupRequest,isRequestValidated, signup)
+router.post('/forget-password',forgetPassword)
+router.post('/reset-password/:token',resetPassword)
 router.post('/googleLogin',loginGoogle)
 router.post('/facebookLogin',loginFacebook)
 router.post('/getUserDetail',requireSignin,userMiddleware,getUserDetail)

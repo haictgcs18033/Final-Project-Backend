@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const shortid = require('shortid')
 const fetch = require('node-fetch')
+const nodemailer = require('nodemailer');
 // Google Login
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client('1052309418279-37lkf36gbep0pi8sp9ke0a8uqgl8fogq.apps.googleusercontent.com')
@@ -273,4 +274,75 @@ exports.loginFacebook = (req, res) => {
             })
         })
 
+}
+exports.forgetPassword=(req,res)=>{
+    const {email}=req.body
+    User.findOne({email:email}).exec((err,user)=>{
+        if(err) return res.status(400).json({message:"Something went wrong"})
+        if(!user){
+            return res.status(400).json({message:"User is not registered"})
+        }
+        if(user){
+            const token=jwt.sign({email:user.email,userId:user._id},process.env.RESET_PASSWORD)
+            console.log(token);
+            let output = `
+            <div>
+               <h3>Reset Password</h3>
+               <p>Here is your reset password link: </p>
+               <p>http://192.168.1.6:3000/reset-password/${token}</p>
+            </div>
+            `
+            User.findOne({ email: email }).exec((err, user) => {
+                if (err) {
+                    console.log(err)
+                    // return res.status(404).json({ message: err })
+                } else {
+                    async function main() {
+                        let transporter = await nodemailer.createTransport({
+                            host: "smtp.gmail.com",
+                            port: 465,
+                            secure: true, // true for 465, false for other ports
+                            auth: {
+                                user: `fesdvktest@gmail.com`,
+                                pass: `admintestaccount`
+                            }
+                        })
+                        let emailSent = await transporter.sendMail({
+                            from: ` FES <fesdvktest@gmail.com>`,
+                            to: `${email}`, // list of receivers
+                            subject: "FES Notification", // Subject line
+                            text: "Reset Link", // plain text body
+                            html: output, // html body
+                        })
+                        console.log(emailSent.messageId);
+                        console.log('email has been sent')
+                       
+                    }
+                    main().catch(err => {
+                        console.log(err)
+                        res.status(400).json({ message: 'You need to provide your gmail google for conducting this feature' });
+                    })
+                }
+            })
+        }
+    })
+}
+exports.resetPassword=(req,res)=>{
+    const {token}=req.params
+    const verifyUser=jwt.verify(token,process.env.RESET_PASSWORD)
+    if(!req.body.newPassword){
+        res.status(400).json({message:"Please provide your new password"})
+    }
+    const password=bcrypt.hashSync(req.body.newPassword,10);
+    User.updateOne({_id:verifyUser.userId},{
+        $set:{
+           hash_password:password
+        }
+    }).exec()
+    .then(()=>{
+      res.status(200).json({message:"Reset password successfully"})
+    })
+    .catch(err=>{
+        res.status(400).json({message:err})
+    })
 }
