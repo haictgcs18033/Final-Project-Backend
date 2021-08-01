@@ -284,7 +284,6 @@ exports.forgetPassword=(req,res)=>{
         }
         if(user){
             const token=jwt.sign({email:user.email,userId:user._id},process.env.RESET_PASSWORD)
-            console.log(token);
             let output = `
             <div>
                <h3>Reset Password</h3>
@@ -320,7 +319,7 @@ exports.forgetPassword=(req,res)=>{
                     }
                     main().catch(err => {
                         console.log(err)
-                        res.status(400).json({ message: 'You need to provide your gmail google for conducting this feature' });
+                        res.status(400).json({err});
                     })
                 }
             })
