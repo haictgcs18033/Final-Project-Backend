@@ -13,8 +13,8 @@ const shortid = require('shortid')
 // AWS Multer
 const aws = require('aws-sdk')
 var s3 = new aws.S3({
-  accessKeyId:'AKIA2CND24UTRGYI7U2U',
-  secretAccessKey:'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'
+  accessKeyId:process.env.ACCESS_KEY_ID,
+  secretAccessKey:process.env.SECCRET_KEY_ID
 })
 const multerS3 = require('multer-s3')
 const upload = multer({

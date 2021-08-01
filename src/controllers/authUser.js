@@ -289,7 +289,7 @@ exports.forgetPassword=(req,res)=>{
             <div>
                <h3>Reset Password</h3>
                <p>Here is your reset password link: </p>
-               <p>https://final-project-lemon.vercel.app/user/reset-password/${token}</p>
+               <p>https://final-project-lemon.vercel.app/reset-password/${token}</p>
             </div>
             `
             User.findOne({ email: email }).exec((err, user) => {
