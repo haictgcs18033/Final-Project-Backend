@@ -39,4 +39,6 @@ app.use('/page',pageRoute)
 app.use('/address',addressRoute)
 app.use('/order',orderRoute)
 app.use('/email',emailRoute)
-app.listen(4000)
+app.listen(process.env.PORT,()=>{
+    console.log(`Server is running on port ${process.env.PORT}`);
+})
