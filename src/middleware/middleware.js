@@ -300,7 +300,7 @@ exports.sendEmailCardPayment = (req, res, next) => {
     <p> Time you paid online : ${date} , ${time}</p>
     </div>
     <div>
-    <img src="http://localhost:4000/public/thankyou.png"/>
+    <img src="https://fes-server-backend.s3.ap-southeast-1.amazonaws.com/thankyou.png"/>
     </div>
     `
     User.findOne({ email: emailUser }).exec((err, user) => {
@@ -315,7 +315,7 @@ exports.sendEmailCardPayment = (req, res, next) => {
                     secure: true, // true for 465, false for other ports
                     auth: {
                         user: `fesdvktest@gmail.com`,
-                        pass: `admintestaccount`
+                        pass: process.env.FES_ADMIN_PASSWORD
                     }
                 })
                 let email = await transporter.sendMail({

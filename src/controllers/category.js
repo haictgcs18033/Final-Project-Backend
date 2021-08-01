@@ -10,7 +10,9 @@ exports.categoryAdd = (req, res) => {
         slug: `${slugify(req.body.name)}-${shortid.generate()}`
     })
     if (req.file) {
-        let categoryUrl = process.env.APP_API + '/public/' + req.file.filename
+        // let categoryUrl = process.env.APP_API + '/public/' + req.file.filename
+        // Access into file location to get image from aws
+        let categoryUrl = req.file.location
         categoryObj.categoryImage = categoryUrl
     }
     if (parentId) {

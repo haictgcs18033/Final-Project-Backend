@@ -116,7 +116,7 @@ exports.updateUserDetail = (req, res) => {
     const { firstName, lastName, email } = req.body
 
     if (req.file) {
-        let userImageUrl = req.file.filename
+        let userImageUrl = req.file.location
         User.updateOne({ _id: req.user._id }, {
             $set: {
                 firstName: firstName,
@@ -289,7 +289,7 @@ exports.forgetPassword=(req,res)=>{
             <div>
                <h3>Reset Password</h3>
                <p>Here is your reset password link: </p>
-               <p>http://192.168.1.6:3000/reset-password/${token}</p>
+               <p>https://final-project-lemon.vercel.app/user/reset-password/${token}</p>
             </div>
             `
             User.findOne({ email: email }).exec((err, user) => {
@@ -304,7 +304,7 @@ exports.forgetPassword=(req,res)=>{
                             secure: true, // true for 465, false for other ports
                             auth: {
                                 user: `fesdvktest@gmail.com`,
-                                pass: `admintestaccount`
+                                pass: process.env.FES_ADMIN_PASSWORD
                             }
                         })
                         let emailSent = await transporter.sendMail({
