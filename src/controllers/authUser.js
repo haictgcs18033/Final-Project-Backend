@@ -51,6 +51,11 @@ exports.signin = (req, res) => {
                         message: 'Email or password wrong'
                     })
                 }
+                if(await user.authenticate(req.body.password) && user.role===admin){
+                    return res.status(400).json({
+                        message: 'Please use your customer account'
+                    })
+                }
                 if (await user.authenticate(req.body.password) && user.role === 'customer') {
                     // const token = jwt.sign({ _id: user._id,role:user.role }, process.env.TOKEN, { expiresIn: '1h' })
                     // if we want to check the return value from authenticate function we need to use a async await as following code 
@@ -315,8 +320,7 @@ exports.forgetPassword=(req,res)=>{
                             html: output, // html body
                         })
                         console.log(emailSent.messageId);
-                        console.log('email has been sent')
-                       
+                        console.log('email has been sent')      
                     }
                     main().catch(err => {
                         console.log(err)

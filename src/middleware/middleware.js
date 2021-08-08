@@ -191,8 +191,8 @@ exports.sendEmail = async (req, res, next) => {
                         port: 465,
                         secure: true, // true for 465, false for other ports
                         auth: {
-                            user: `${emailGoogle}`,
-                            pass: `${passwordGoogle}`
+                            user: `fesdvktest@gmail.com`,
+                            pass: process.env.FES_ADMIN_PASSWORD
                         }
                     })
                     let email = await transporter.sendMail({
@@ -248,8 +248,7 @@ exports.sendEmailCreateAccount = async (req, res, next) => {
         <div>
              <p>Email : ${email}</p>   
              <p>Password : ${password}</p>
-             <p><b>Note : </b>Please access to the following link to change the password below into your gmail password</p>
-             <a href="#">Click here</a>
+          
         </div>
       `
     }
@@ -264,15 +263,15 @@ exports.sendEmailCreateAccount = async (req, res, next) => {
                     port: 465,
                     secure: true, // true for 465, false for other ports
                     auth: {
-                        user: `${emailGoogle}`,
-                        pass: `${passwordGoogle}`
+                        user: `fesdvktest@gmail.com`,
+                        pass: process.env.FES_ADMIN_PASSWORD
                     }
                 })
                 let email = await transporter.sendMail({
                     from: ` FES <${emailGoogle}>`,
                     to: `${emailUser}`, // list of receivers
                     subject: "FES Notification", // Subject line
-                    text: "Hello world?", // plain text body
+                    text: "Welcome to FES", // plain text body
                     html: output, // html body
                 })
                 console.log(email.messageId);
