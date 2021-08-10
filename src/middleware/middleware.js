@@ -146,8 +146,8 @@ exports.sendEmail = async (req, res, next) => {
                         port: 465,
                         secure: true, // true for 465, false for other ports
                         auth: {
-                            user: `${emailGoogle}`,
-                            pass: `${passwordGoogle}`
+                            user: `fesdvktest@gmail.com`,
+                            pass: process.env.FES_ADMIN_PASSWORD
                         }
                     })
                     let email = await transporter.sendMail({
