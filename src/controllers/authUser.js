@@ -51,7 +51,7 @@ exports.signin = (req, res) => {
                         message: 'Email or password wrong'
                     })
                 }
-                if(await user.authenticate(req.body.password) && user.role===admin){
+                if(await user.authenticate(req.body.password) && user.role==="admin"){
                     return res.status(400).json({
                         message: 'Please use your customer account'
                     })
