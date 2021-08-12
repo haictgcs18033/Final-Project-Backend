@@ -63,7 +63,7 @@ exports.addCart = (req, res) => {
                     cartItems: req.body.cartItems
                 })
                 cart.save((err, cart) => {
-                    if (err) return res.status(400).json({ msg: err })
+                    if (err) return res.status(400).json({ message: err })
                     if (cart) {
                         return res.status(200).json({ cart: cart })
                     }
@@ -75,7 +75,7 @@ exports.addCart = (req, res) => {
 exports.decremental = (req, res) => {
     Cart.findOne({ user: req.user._id })
         .exec((err, cart) => {
-            if (err) return res.status(400).json({ msg: err })
+            if (err) return res.status(400).json({ message: err })
             if (cart) {
                 const product = req.body.cartItems.product
                 const color = req.body.cartItems.color
@@ -86,7 +86,7 @@ exports.decremental = (req, res) => {
 
                 if (isItemAdded.quantity === 1 && isItemAdded.price === limitedPrice) {
                     return res.status(400).json({
-                        msg: 'Cant decrease element'
+                        message: 'Cant decrease element'
                     })
                 }
 
@@ -106,7 +106,7 @@ exports.decremental = (req, res) => {
                         }
                     })
                         .exec((err, _cart) => {
-                            if (err) return res.status(400).json({ msg: err })
+                            if (err) return res.status(400).json({ message: err })
                             if (_cart) {
                                 return res.status(200).json({ cart: cart })
                             }
@@ -125,7 +125,7 @@ exports.getCart = (req, res) => {
             if (error) return res.status(400).json({ error });
             if (!cart) {
                 return res.status(400).json({
-                    msg: 'No Item Found'
+                    message: 'No Item Found'
                 })
             }
             if (cart) {

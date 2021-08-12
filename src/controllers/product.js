@@ -9,7 +9,7 @@ exports.getProduct = (req, res) => {
     Product.find({})
         .exec((err, product) => {
             if (err) return res.status(400).json({
-                msg: err
+                message: err
             })
             if (product) {
                 return res.status(200).json(product)
@@ -337,7 +337,7 @@ exports.getProductItemBySlug = async (req, res) => {
         .then(async category => {
             if (!category) {
                 return res.status(400).json({
-                    msg: 'No Category Found'
+                    message: 'No Category Found'
                 })
             }
             if (category) {

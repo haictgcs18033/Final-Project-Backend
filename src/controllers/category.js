@@ -22,7 +22,7 @@ exports.categoryAdd = (req, res) => {
     cat.save((err, data) => {
         if (err) {
             return res.status(400).json({
-                msg: err
+                message: err
             })
         }
         return res.status(200).json({
@@ -56,7 +56,7 @@ exports.getCategory = (req, res) => {
         .exec((err, categories) => {
             if (err) {
                 return res.status(400).json({
-                    msg: err
+                    message: err
                 })
             }
             if (categories) {
@@ -108,9 +108,9 @@ exports.deleteCategory= async (req,res)=>{
     }
    
     if(deleteCategories.length===ids.length){
-        res.status(200).json({msg:"Categories removed"})
+        res.status(200).json({message:"Categories removed"})
     }else{
-        res.status(400).json({msg:'Something went wrong'})
+        res.status(400).json({message:'Something went wrong'})
     }
    
 }
