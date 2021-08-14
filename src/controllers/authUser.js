@@ -296,38 +296,32 @@ exports.forgetPassword=(req,res)=>{
                <p>https://final-project-eta.vercel.app/reset-password/${token}</p>
             </div>
             `
-            User.findOne({ email: email }).exec((err, user) => {
-                if (err) {
-                    console.log(err)
-                    // return res.status(404).json({ message: err })
-                } else {
-                    async function main() {
-                        let transporter = await nodemailer.createTransport({
-                            service:"gmail", 
-                            host: "smtp.gmail.com",
-                            port: 465,
-                            secure: true, // true for 465, false for other ports
-                            auth: {
-                                user: `fesdvktest@gmail.com`,
-                                pass: process.env.FES_ADMIN_PASSWORD
-                            }
-                        })
-                        let emailSent = await transporter.sendMail({
-                            from: ` FES <fesdvktest@gmail.com>`,
-                            to: `${email}`, // list of receivers
-                            subject: "FES Notification", // Subject line
-                            text: "Reset Link", // plain text body
-                            html: output, // html body
-                        })
-                        console.log(emailSent.messageId);
-                        console.log('email has been sent')      
+            async function main() {
+                let transporter = await nodemailer.createTransport({
+                    service:"gmail", 
+                    host: "smtp.gmail.com",
+                    port: 465,
+                    secure: true, // true for 465, false for other ports
+                    auth: {
+                        user: `fesdvktest@gmail.com`,
+                        pass: process.env.FES_ADMIN_PASSWORD
                     }
-                    main().catch(err => {
-                        console.log(err)
-                        res.status(400).json({err});
-                    })
-                }
+                })
+                let emailSent = await transporter.sendMail({
+                    from: ` FES <fesdvktest@gmail.com>`,
+                    to: `${email}`, // list of receivers
+                    subject: "FES Notification", // Subject line
+                    text: "Reset Link", // plain text body
+                    html: output, // html body
+                })
+                console.log(emailSent.messageId);
+                console.log('email has been sent')      
+            }
+            main().catch(err => {
+                console.log(err)
+                res.status(400).json({err});
             })
+          
         }
     })
 }
