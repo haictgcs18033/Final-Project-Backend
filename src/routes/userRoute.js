@@ -47,8 +47,8 @@ router.post('/forget-password',forgetPassword)
 router.post('/reset-password/:token',resetPassword)
 router.post('/googleLogin',loginGoogle)
 router.post('/facebookLogin',loginFacebook)
-router.post('/getUserDetail',requireSignin,userMiddleware,getUserDetail)
-router.post('/changePassword',requireSignin,userMiddleware,changePassword)
-router.post('/updateUserDetail',requireSignin,userMiddleware,upload.single('userImage'),updateUserDetail)
+router.post('/getUserDetail',requireSignin,getUserDetail)
+router.post('/changePassword',requireSignin,changePassword)
+router.post('/updateUserDetail',requireSignin,upload.single('userImage'),updateUserDetail)
 
 module.exports = router
