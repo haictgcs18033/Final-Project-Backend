@@ -15,6 +15,8 @@ var s3 = new aws.S3({
   secretAccessKey:process.env.SECCRET_KEY_ID
 })
 const multerS3 = require('multer-s3')
+const { emailContactController } = require('../controllers/user')
+
 const upload = multer({
   storage: multerS3({
     s3: s3,
@@ -50,5 +52,6 @@ router.post('/facebookLogin',loginFacebook)
 router.post('/getUserDetail',requireSignin,getUserDetail)
 router.post('/changePassword',requireSignin,changePassword)
 router.post('/updateUserDetail',requireSignin,upload.single('userImage'),updateUserDetail)
+router.post('/emailContact',emailContactController)
 
 module.exports = router
