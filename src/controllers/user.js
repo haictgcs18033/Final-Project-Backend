@@ -72,6 +72,7 @@ exports.getEmailUser=(req,res)=>{
   EmailContact.find({}).exec((err,email)=>{
     if(err) return res.status(404).json({message:err})
     if(email){
+    
       return res.status(200).json(email)
     }
   })
