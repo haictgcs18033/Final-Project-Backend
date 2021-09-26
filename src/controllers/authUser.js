@@ -51,7 +51,7 @@ exports.signin = (req, res) => {
                         message: 'Email or password wrong'
                     })
                 }
-                if(await user.authenticate(req.body.password) && user.role==="admin"){
+                if (await user.authenticate(req.body.password) && user.role === "admin") {
                     return res.status(400).json({
                         message: 'Please use your customer account'
                     })
@@ -92,8 +92,8 @@ exports.getUserDetail = (req, res) => {
 exports.changePassword = (req, res) => {
     const { newPassword } = req.body
     const new_hash_password = bcrypt.hashSync(newPassword, 10)
-    if(!newPassword){
-        return res.status(400).json({message:'Please provide us your new password'})
+    if (!newPassword) {
+        return res.status(400).json({ message: 'Please provide us your new password' })
     }
     User.findOne({ _id: req.user._id }).exec()
         .then(async user => {
@@ -149,7 +149,7 @@ exports.updateUserDetail = (req, res) => {
                 res.status(200).json(user)
             })
             .catch(err => {
-            
+
                 res.status(400).json({ message: err })
             })
     }
@@ -280,15 +280,15 @@ exports.loginFacebook = (req, res) => {
         })
 
 }
-exports.forgetPassword=(req,res)=>{
-    const {email}=req.body
-    User.findOne({email:email}).exec((err,user)=>{
-        if(err) return res.status(400).json({message:"Something went wrong"})
-        if(!user){
-            return res.status(400).json({message:"User is not registered"})
+exports.forgetPassword = (req, res) => {
+    const { email } = req.body
+    User.findOne({ email: email }).exec((err, user) => {
+        if (err) return res.status(400).json({ message: "Something went wrong" })
+        if (!user) {
+            return res.status(400).json({ message: "User is not registered" })
         }
-        if(user){
-            const token=jwt.sign({email:user.email,userId:user._id},process.env.RESET_PASSWORD)
+        if (user) {
+            const token = jwt.sign({ email: user.email, userId: user._id }, process.env.RESET_PASSWORD)
             let output = `
             <div>
                <h3>Reset Password</h3>
@@ -298,7 +298,7 @@ exports.forgetPassword=(req,res)=>{
             `
             async function main() {
                 let transporter = await nodemailer.createTransport({
-                    service:"gmail", 
+                    service: "gmail",
                     host: "smtp.gmail.com",
                     port: 465,
                     secure: true, // true for 465, false for other ports
@@ -315,32 +315,32 @@ exports.forgetPassword=(req,res)=>{
                     html: output, // html body
                 })
                 console.log(emailSent.messageId);
-                console.log('email has been sent')      
+                console.log('email has been sent')
             }
             main().catch(err => {
                 console.log(err)
-                res.status(400).json({err});
+                res.status(400).json({ err });
             })
-          
+
         }
     })
 }
-exports.resetPassword=(req,res)=>{
-    const {token}=req.params
-    const verifyUser=jwt.verify(token,process.env.RESET_PASSWORD)
-    if(!req.body.newPassword){
-        res.status(400).json({message:"Please provide your new password"})
+exports.resetPassword = (req, res) => {
+    const { token } = req.params
+    const verifyUser = jwt.verify(token, process.env.RESET_PASSWORD)
+    if (!req.body.newPassword) {
+        res.status(400).json({ message: "Please provide your new password" })
     }
-    const password=bcrypt.hashSync(req.body.newPassword,10);
-    User.updateOne({_id:verifyUser.userId},{
-        $set:{
-           hash_password:password
+    const password = bcrypt.hashSync(req.body.newPassword, 10);
+    User.updateOne({ _id: verifyUser.userId }, {
+        $set: {
+            hash_password: password
         }
     }).exec()
-    .then(()=>{
-      res.status(200).json({message:"Reset password successfully"})
-    })
-    .catch(err=>{
-        res.status(400).json({message:err})
-    })
+        .then(() => {
+            res.status(200).json({ message: "Reset password successfully" })
+        })
+        .catch(err => {
+            res.status(400).json({ message: err })
+        })
 }
